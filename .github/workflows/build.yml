@@ -15,10 +15,21 @@ jobs:
         with:
           flutter-version: '3.22.3'
 
-      - run: flutter pub get
-      - run: flutter build apk --release
+      - name: Create Flutter project
+        run: flutter create temp_app
+
+      - name: Copy game files
+        run: |
+          cp pubspec.yaml temp_app/pubspec.yaml
+          cp -r lib temp_app/lib
+
+      - name: Build APK
+        working-directory: temp_app
+        run: |
+          flutter pub get
+          flutter build apk --release
 
       - uses: actions/upload-artifact@v4
         with:
           name: arrow-maze-apk
-          path: build/app/outputs/flutter-apk/app-release.apk
+          path: temp_app/build/app/outputs/flutter-apk/app-release.apk
